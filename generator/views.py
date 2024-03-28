@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from io import BytesIO
-from PIL import Image
 import treepoem
 import re
+import barcode
+from barcode.writer import SVGWriter
 
 
 def is_valid_color(color_value):
@@ -39,13 +40,17 @@ def generate_barcode(request):
         if image_type == 'png':
             buffer = BytesIO()
             image.save(buffer, format='PNG')
-            buffer.seek(0)  # Rewind the buffer
+            buffer.seek(0)
             return HttpResponse(buffer.getvalue(), content_type='image/png')
         elif image_type == 'svg':
-            buffer.seek(0)  # Reset buffer position
-            image = Image.open(buffer)
-            # Treepoem generates SVG as a byte string
-            return HttpResponse(image, content_type='image/svg+xml')
+            barcode_class = barcode.get_barcode_class('ean8')
+            barcode_obj = barcode_class(code, writer=SVGWriter())
+            svg_content = barcode_obj.render({
+                'foreground': f'#{foreground_color}',
+                'background': f'#{background_color}',
+                'write_text': True,
+            })
+            return HttpResponse(svg_content, content_type='image/svg+xml')
     except Exception as e:
         return HttpResponse(f"Error generating barcode: {e}", status=500)
 

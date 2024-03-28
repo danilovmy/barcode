@@ -53,14 +53,27 @@ class BarcodeGeneratorTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn("Foreground and background colors must be valid hex RRGGBB or CCMMYYKK values", response.content.decode())
 
-    def test_all_parameters_defined(self):
+    def test_multiple_parameters_defined(self):
         response = self.client.get(self.url, {
             'code': '1234567',
-            'image_type': 'png',
+            'image_type': 'svg',
             'height': '21.38',
             'width': '17.05',
             'foreground': '004AAD',
             'background': 'FF0000CC'
         })
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['Content-Type'], 'image/png')
+        self.assertEqual(response['Content-Type'], 'image/svg+xml')
+
+    def test_image_type_not_accepted(self):
+        response = self.client.get(self.url, {
+            'code': '1234567',
+            'image_type': 'jpeg',
+            'height': '21.38',
+            'width': '17.05',
+            'foreground': '004AAD',
+            'background': 'FF0000CC'
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("Image type must be either 'png' or 'svg'", response.content.decode())
+

@@ -12,14 +12,13 @@ Assuming Docker and `docker-compose` are installed, the commands to get the appl
 
     docker-compose exec web python manage.py migrate
 
-To quit the application, press <kbd>Ctrl</kbd>+<kbd>C</kbd>. If you want to run the application in the background, use:
-
-    docker-compose start
-
+To quit the application, press <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 ### About the bar code generation endpoint
 
 Barcode Generation Service currently supports:
 - EAN8 barcode generation => by default
 - Height & Width => Float, calculated as  mm
 - Background and Foreground colours => Hex value, minus the #
-- SVG output pending
+- Initially picked Poemtree package to ouput EAN8 barcode, as most closely resembles barcode image provided
+- Used python-barcode package for SVG output
+- Business Decision required on which Barcode style to go for
