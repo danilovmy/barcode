@@ -2,7 +2,7 @@
 
 Barcode Service is a Django web application designed to run in a Docker container. A `docker-compose.yml` file is included that builds and runs a full stack including database and reverse-proxy (Nginx).
 
-### Running in Production
+### Getting up and running
 
 Assuming Docker and `docker-compose` are installed, the commands to get the application up and running include:
 
