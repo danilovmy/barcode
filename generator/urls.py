@@ -1,6 +1,6 @@
 from django.urls import path
-from . import views
+from .views import BarcodeGeneratorView
 
 urlpatterns = [
-    path('generate/', views.generate_barcode, name='generate_barcode'),
+    path('generate/', BarcodeGeneratorView.as_view(), name='generate_barcode'),
 ]
